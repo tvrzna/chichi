@@ -1,0 +1,4 @@
+github.com/tvrzna/go-utils/args v0.0.1 h1:bwpMhV/VrYMnGy56DyxJ9P+s99nck96J7212XyoBtaM=
+github.com/tvrzna/go-utils/args v0.0.1/go.mod h1:LD8ey0IbYFEatYvyjy2Jf45ywuLnKZKbAtj8ndT0C9k=
+github.com/tvrzna/go-utils/config v0.0.1 h1:l4jFWpbWqrvXfByknz/ggAjCV0GaTXLtsEmZRC12KY8=
+github.com/tvrzna/go-utils/config v0.0.1/go.mod h1:KqNyUFocRO0ICRRcPR0tJu3zzUyGYOf5HAoKPcu2MBo=
