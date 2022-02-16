@@ -28,12 +28,7 @@ func (s *SendNotify) strLength() string {
 	return strconv.Itoa(1000 * s.length)
 }
 
-func (s *SendNotify) Send() error {
-	path, err := exec.LookPath("notify-send")
-	if err != nil {
-		return err
-	}
-
-	_, err = exec.Command(path, "-u", s.urgencyLevel.String(), "-t", s.strLength(), s.message).Output()
+func (s *SendNotify) Send(path string) error {
+	_, err := exec.Command(path, "-u", s.urgencyLevel.String(), "-t", s.strLength(), s.message).Output()
 	return err
 }

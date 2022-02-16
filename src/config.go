@@ -1,6 +1,7 @@
 package src
 
 import (
+	"os/exec"
 	"strconv"
 	"strings"
 
@@ -9,10 +10,11 @@ import (
 )
 
 type Config struct {
-	ShortPeriod int `config:"SHORT_PERIOD" parser:"ParseInt" default:"600"`
-	ShortBreak  int `config:"SHORT_BREAK" parser:"ParseInt" default:"10"`
-	LongPeriod  int `config:"LONG_PERIOD" parser:"ParseInt" default:"2100"`
-	LongBreak   int `config:"LONG_BREAK" parser:"ParseInt" default:"60"`
+	NotifySendPath string
+	ShortPeriod    int `config:"SHORT_PERIOD" parser:"ParseInt" default:"600"`
+	ShortBreak     int `config:"SHORT_BREAK" parser:"ParseInt" default:"10"`
+	LongPeriod     int `config:"LONG_PERIOD" parser:"ParseInt" default:"2100"`
+	LongBreak      int `config:"LONG_BREAK" parser:"ParseInt" default:"60"`
 }
 
 func (c *Config) ParseInt(value, defaultValue string) (result int) {
@@ -33,8 +35,8 @@ func (c *Config) ParseIntWithIntDefault(value string, defaultValue int) (result 
 	return result
 }
 
-func loadConfig(path string, arguments []string) (c *Config) {
-	c = &Config{}
+func loadConfig(path string, arguments []string) (*Config, error) {
+	c := &Config{}
 	config.LoadConfigFromFile(c, path, true)
 
 	args.ParseArgs(arguments, func(value, nextValue string) {
@@ -50,5 +52,8 @@ func loadConfig(path string, arguments []string) (c *Config) {
 		}
 	})
 
-	return c
+	path, err := exec.LookPath("notify-send")
+	c.NotifySendPath = path
+
+	return c, err
 }

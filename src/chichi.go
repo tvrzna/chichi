@@ -25,10 +25,14 @@ const (
 func Run() {
 	handleServiceArgs(os.Args)
 
-	conf := loadConfig(filepath.Join(getConfigPath(), configFileName), os.Args)
+	conf, err := loadConfig(filepath.Join(getConfigPath(), configFileName), os.Args)
+	if err != nil {
+		log.Println(err)
+		os.Exit(1)
+	}
 
-	go loop(Normal, conf.ShortPeriod, conf.ShortBreak, "short")
-	go loop(Critical, conf.LongPeriod, conf.LongBreak, "looong")
+	go loop(conf, Normal, conf.ShortPeriod, conf.ShortBreak, "short")
+	go loop(conf, Critical, conf.LongPeriod, conf.LongBreak, "looong")
 
 	wait()
 }
@@ -48,13 +52,13 @@ func getConfigPath() string {
 	return configPath
 }
 
-func loop(level UrgencyLevel, periodLength int, breakLength int, breakType string) {
+func loop(conf *Config, level UrgencyLevel, periodLength int, breakLength int, breakType string) {
 	for {
 		time.Sleep(time.Duration(periodLength) * time.Second)
 		message := formatBreakMessage(breakLength, breakType)
 		n := &SendNotify{urgencyLevel: level, length: breakLength, message: message}
 		log.Printf("time for %s break for %d seconds", breakType, breakLength)
-		if err := n.Send(); err != nil {
+		if err := n.Send(conf.NotifySendPath); err != nil {
 			log.Println(err)
 		}
 	}
