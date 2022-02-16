@@ -105,9 +105,9 @@ func printHelp() {
 	fmt.Printf("  -h, --help\t\t\tprint this help\n")
 	fmt.Printf("  -v, --version\t\t\tprint version\n")
 	fmt.Printf("  -sp, --short-period TIME\tperiod length between short breaks\n")
-	fmt.Printf("  -sb, --short-break PATH\tlength of short breaks\n")
+	fmt.Printf("  -sb, --short-break TIME\tlength of short breaks\n")
 	fmt.Printf("  -lp, --long-period TIME\tperiod length between long breaks\n")
-	fmt.Printf("  -lb, --long-break PATH\tlength of long breaks\n")
+	fmt.Printf("  -lb, --long-break TIME\tlength of long breaks\n")
 }
 
 func getVersion() string {
