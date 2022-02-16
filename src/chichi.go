@@ -23,14 +23,7 @@ const (
 )
 
 func Run() {
-	if args.ContainsArg(os.Args, "-h", "--help") {
-		printHelp()
-		os.Exit(0)
-	}
-	if args.ContainsArg(os.Args, "-v", "--version") {
-		fmt.Printf("chichi %s\nhttps://github.com/tvrzna/chichi\n\nReleased under the MIT License.\n", version)
-		os.Exit(0)
-	}
+	handleServiceArgs(os.Args)
 
 	conf := loadConfig(filepath.Join(getConfigPath(), configFileName), os.Args)
 
@@ -91,8 +84,26 @@ func formatBreakMessage(breakLength int, breakType string) string {
 	return fmt.Sprintf("It's a time for %s break for %d %s.\n\nThe break ends at %s.", breakType, length, levels[level], breakEnd.Format("15:04:05"))
 }
 
+func handleServiceArgs(arguments []string) {
+	if args.ContainsArg(arguments, "-h", "--help") {
+		printHelp()
+		os.Exit(0)
+	}
+	if args.ContainsArg(arguments, "-v", "--version") {
+		fmt.Printf("chichi %s\nhttps://github.com/tvrzna/chichi\n\nReleased under the MIT License.\n", getVersion())
+		os.Exit(0)
+	}
+}
+
 func printHelp() {
-	fmt.Println("TODO!")
+	fmt.Println("Usage: chichi [options]")
+	fmt.Println("Options:")
+	fmt.Printf("  -h, --help\t\t\tprint this help\n")
+	fmt.Printf("  -v, --version\t\t\tprint version\n")
+	fmt.Printf("  -sp, --short-period TIME\tperiod length between short breaks\n")
+	fmt.Printf("  -sb, --short-break PATH\tlength of short breaks\n")
+	fmt.Printf("  -lp, --long-period TIME\tperiod length between long breaks\n")
+	fmt.Printf("  -lb, --long-break PATH\tlength of long breaks\n")
 }
 
 func getVersion() string {
