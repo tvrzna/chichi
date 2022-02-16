@@ -71,21 +71,32 @@ func wait() {
 }
 
 func formatBreakMessage(breakLength int, breakType string) string {
-	levels := []string{"seconds", "minutes", "hours", "days"}
-	// levelsTypes := []int{60, 60, 24}
+	breakEnd := time.Now().Add(time.Duration(breakLength) * time.Second)
+	length, unit := formatBreakLength(breakLength)
+
+	return fmt.Sprintf("It's a time for %s break for %d %s.\n\nThe break ends at %s.", breakType, length, unit, breakEnd.Format("15:04:05"))
+}
+
+func formatBreakLength(breakLength int) (length int, unit string) {
+	levels := []string{"second", "minute", "hour", "day"}
+	levelsTypes := []int{60, 60, 24}
 
 	level := 0
-	length := breakLength
-	// for i := 0; i < len(levelsTypes); i++ {
-	// 	if (length % levelsTypes[i]) >= 1 {
-	// 		length = length / levelsTypes[i]
-	// 		level = i
-	// 	}
-	// }
+	length = breakLength
+	for i := 0; i < len(levelsTypes); i++ {
+		if (length / levelsTypes[i]) >= 1 {
+			length = length / levelsTypes[i]
+			level = i + 1
+		} else {
+			break
+		}
+	}
+	unit = levels[level]
+	if length > 1 {
+		unit += "s"
+	}
 
-	breakEnd := time.Now().Add(time.Duration(breakLength) * time.Second)
-
-	return fmt.Sprintf("It's a time for %s break for %d %s.\n\nThe break ends at %s.", breakType, length, levels[level], breakEnd.Format("15:04:05"))
+	return length, unit
 }
 
 func handleServiceArgs(arguments []string) {
